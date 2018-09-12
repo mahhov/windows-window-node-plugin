@@ -6,8 +6,9 @@
     "start": "node doesitwork"
   },
   "devDependencies": {
-    "nan": "^2.0.5",
     "mocha": "^2.2.5",
+    "nan": "^2.0.5",
+    "node-cmake": "^2.5.1",
     "node-gyp": "^1.0.3"
   },
   "dependencies": {

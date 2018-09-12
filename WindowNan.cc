@@ -79,7 +79,7 @@ class WindowWrap : public Nan::ObjectWrap {
 	}
 
 	static NAN_MODULE_INIT(WindowWrap::nInit) {
-		v8::Local <v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(WindowWrap::nNew);
+		v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(WindowWrap::nNew);
 		constructor.Reset(ctor);
 		ctor->InstanceTemplate()->SetInternalFieldCount(1);
 		ctor->SetClassName(Nan::New("Window").ToLocalChecked());
