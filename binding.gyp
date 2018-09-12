@@ -3,8 +3,8 @@
     {
       "target_name": "WindowNan",
       "sources": [
-        "WindowNan.cc",
-        "Window.cc",
+        "src/WindowNan.cc",
+        "src/Window.cc",
       ],
       "include_dirs": ["<!(node -e \"require('nan')\")"],
       "libraries": [
