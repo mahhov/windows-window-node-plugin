@@ -3,7 +3,7 @@
   "scripts": {
     "configure": "node-gyp configure",
     "build": "node-gyp build",
-    "start": "node doesitwork"
+    "test": "node test/doesitwork"
   },
   "devDependencies": {
     "mocha": "^2.2.5",
