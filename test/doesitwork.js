@@ -29,7 +29,7 @@ loop(() => {
     window.update();
 }, 5);
 
-
-// auto make window
-// auto param type conversion
+// todo
+// makeWindow to support window paramters
+// more layout elements and flexibility
 // stop when window closed
