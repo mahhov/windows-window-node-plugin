@@ -56,6 +56,12 @@ class WindowWrap : public Nan::ObjectWrap {
 		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]));
 	}
 
+	static NAN_GETTER(WindowWrap::nHasWindow) {
+		WindowWrap* windowWrap = Nan::ObjectWrap::Unwrap<WindowWrap>(info.This());
+		Window* window = windowWrap->window;
+		info.GetReturnValue().Set(window->hasWindow);
+	}
+
 	static NAN_MODULE_INIT(WindowWrap::nInit) {
 		v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(WindowWrap::nNew);
 		constructor.Reset(ctor);
@@ -70,6 +76,7 @@ class WindowWrap : public Nan::ObjectWrap {
 		Nan::SetPrototypeMethod(ctor, "show", nShow);
 		Nan::SetPrototypeMethod(ctor, "hide", nHide);
 		Nan::SetPrototypeMethod(ctor, "setLine", nSetLine);
+		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("hasWindow").ToLocalChecked(), nHasWindow);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());
 	}

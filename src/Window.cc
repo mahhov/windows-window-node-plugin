@@ -27,6 +27,8 @@ void Window::makeWindow() {
 		WS_POPUP | WS_BORDER,
 		0, 0, 0, 0,
 		NULL, NULL, hInstance, this);
+
+	hasWindow = true;
 }
 
 void Window::update() {
@@ -74,8 +76,7 @@ void Window::draw(HWND hwnd) {
 	EndPaint(hwnd, &ps);
 }
 
-LRESULT CALLBACK
-Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_NCCREATE:
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) ((CREATESTRUCT*) lParam)->lpCreateParams);
@@ -83,9 +84,12 @@ Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
 			break;
-		case WM_DESTROY:
+		case WM_DESTROY: {
+			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			window->hasWindow = false;
 			PostQuitMessage(0);
 			break;
+		}
 		case WM_PAINT: {
 			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			window->draw(hwnd);

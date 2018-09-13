@@ -21,11 +21,12 @@ class Window {
 
 	void setLine(int index, std::string line);
 
+	bool hasWindow;
+
   private:
 	void draw(HWND hwnd);
 
-	static LRESULT CALLBACK
-	process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 	HWND hwnd;
 	int width, lineHeight;
