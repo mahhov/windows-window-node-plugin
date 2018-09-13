@@ -27,8 +27,6 @@ void Window::makeWindow() {
 		WS_POPUP | WS_BORDER,
 		0, 0, 0, 0,
 		NULL, NULL, hInstance, this);
-
-	UpdateWindow(hwnd);
 }
 
 bool Window::update() {
@@ -59,7 +57,7 @@ void Window::hide() {
 
 void Window::setLine(int index, std::string line) {
 	lines[index] = line;
-	// RedrawWindow(hwnd, NULL, NULL, 0); // todo is this needed
+	RedrawWindow(hwnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
 void Window::draw(HWND hwnd) {
@@ -80,8 +78,7 @@ LRESULT CALLBACK
 Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	switch (msg) {
 		case WM_NCCREATE:
-			SetWindowLongPtr(hwnd, GWLP_USERDATA,
-			                 (LONG_PTR) ((CREATESTRUCT*) lParam)->lpCreateParams);
+			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) ((CREATESTRUCT*) lParam)->lpCreateParams);
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
