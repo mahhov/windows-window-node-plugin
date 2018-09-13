@@ -29,12 +29,12 @@ void Window::makeWindow() {
 		NULL, NULL, hInstance, this);
 }
 
-bool Window::update() {
+void Window::update() {
 	MSG msg;
-	int getMsgStatus = GetMessage(&msg, NULL, 0, 0);
-	TranslateMessage(&msg);
-	DispatchMessage(&msg);
-	return getMsgStatus > 0;
+	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
 }
 
 void Window::setGeometry(int x, int y, int width, int height) {

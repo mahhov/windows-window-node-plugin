@@ -9,7 +9,7 @@ class Window {
   public:
 	void makeWindow();
 
-	bool update();
+	void update();
 
 	void setGeometry(int x, int y, int width, int height);
 

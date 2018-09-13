@@ -29,8 +29,7 @@ class WindowWrap : public Nan::ObjectWrap {
 	static NAN_METHOD(WindowWrap::nUpdate) {
 		WindowWrap* windowWrap = Nan::ObjectWrap::Unwrap<WindowWrap>(info.This());
 		Window* window = windowWrap->window;
-		bool returnValue = window->update();
-		info.GetReturnValue().Set(returnValue);
+		window->update();
 	}
 
 	static NAN_METHOD(WindowWrap::nSetGeometry) {
