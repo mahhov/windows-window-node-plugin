@@ -1,6 +1,6 @@
 {
   "name": "windows-window-node-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "node plugin to create desktop windows for windows os",
   "author": "mahhov1",
   "main": "src/index.js",
@@ -30,7 +30,13 @@
     "type": "git",
     "url": "git+https://github.com/mahhov/windows-window-node-plugin.git"
   },
-  "keywords": ["windows", "desktop", "window", "native", "plugin"],
+  "keywords": [
+    "windows",
+    "desktop",
+    "window",
+    "native",
+    "plugin"
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/mahhov/windows-window-node-plugin/issues"
