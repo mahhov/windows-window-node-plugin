@@ -8,7 +8,8 @@
     "configure": "node-gyp configure",
     "build": "node-gyp build",
     "test": "node test/doesitwork",
-    "install": "node-gyp rebuild"
+    "install": "node-gyp rebuild",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "devDependencies": {
     "function-repeater": "^1.2.0",
