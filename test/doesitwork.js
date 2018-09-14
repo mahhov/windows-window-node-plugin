@@ -1,6 +1,5 @@
+let Repeater = require('function-repeater');
 let {Window} = require('../src/index');
-
-let sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 let window = new Window();
 window.makeWindow();
@@ -10,24 +9,20 @@ window.show();
 window.setLine(0, "hi there !!");
 window.setLine(1, "this is line 2");
 
-let loop = async (handler, ms) => {
-    while (true) {
-        handler();
-        await sleep(ms);
-    }
-};
-
 let i = 0;
-loop(() => {
-    window.setLine(1, "" + i++);
-}, 1000);
+let increment = new Repeater(
+    () => window.setLine(1, "" + i++),
+    1000, true);
 
-loop(() => {
-    window.update();
-    console.log(window.hasWindow)
-}, 5);
+new Repeater(
+    update => {
+        window.update();
+        if (!window.hasWindow) {
+            increment.stop();
+            update.stop();
+        }
+    }, 5, true);
 
 // todo
 // makeWindow to support window paramters
 // more layout elements and flexibility
-// stop when window closed
