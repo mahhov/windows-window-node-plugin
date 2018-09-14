@@ -51,6 +51,7 @@ void Window::setLines(int lineCount, int lineHeight) {
 
 void Window::show() {
 	ShowWindow(hwnd, 1);
+	markDrawDirty();
 }
 
 void Window::hide() {
@@ -59,6 +60,10 @@ void Window::hide() {
 
 void Window::setLine(int index, std::string line) {
 	lines[index] = line;
+	markDrawDirty();
+}
+
+void Window::markDrawDirty() {
 	RedrawWindow(hwnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW);
 }
 

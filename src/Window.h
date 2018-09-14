@@ -24,6 +24,8 @@ class Window {
 	bool hasWindow;
 
   private:
+	void markDrawDirty();
+
 	void draw(HWND hwnd);
 
 	static LRESULT CALLBACK process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
