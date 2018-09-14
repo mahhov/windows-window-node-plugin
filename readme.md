@@ -1,3 +1,10 @@
+### Windows window node plugin
+
+node plugin to create desktop windows for windows os
+
+## basic example
+
+```js
 let Repeater = require('function-repeater');
 let {Window} = require('../src/index');
 
@@ -7,7 +14,6 @@ window.setGeometry(100, 100, 250, 40);
 window.setLines(2, 20);
 window.show();
 window.setLine(0, "hi there !!");
-window.setLine(1, "this is line 2");
 
 let i = 0;
 let increment = new Repeater(
@@ -22,7 +28,4 @@ new Repeater(
             update.stop();
         }
     }, 5, true);
-
-// todo
-// makeWindow to support window paramters
-// more layout elements and flexibility
+```
