@@ -21,7 +21,7 @@ void Window::makeWindow() {
 	RegisterClassEx(&windowClass);
 
 	hwnd = CreateWindowEx(
-		WS_EX_APPWINDOW,
+		WS_EX_NOACTIVATE | WS_EX_TOPMOST,
 		windowClassName,
 		NULL,
 		WS_POPUP | WS_BORDER,
