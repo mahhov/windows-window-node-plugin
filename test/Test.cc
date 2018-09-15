@@ -1,4 +1,4 @@
-#include "Window"
+#include "../src/Window.h"
 
 int main() {
 	Window window;
@@ -10,6 +10,10 @@ int main() {
 	window.setLine(1, "this is line 2");
 
 	int i = 0;
-	while (window.update())
+	while (window.hasWindow) {
 		window.setLine(1, std::to_string(i++));
+		window.update();
+	}
 }
+
+// g++ -lgdi32 src\Window.cc test\Test.cc && a.exe
