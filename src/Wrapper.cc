@@ -1,5 +1,6 @@
 #include <nan.h>
 #include "Window.h"
+#include "Clipboard.h"
 
 class Wrapper : public Nan::ObjectWrap {
   public:
@@ -62,12 +63,21 @@ class Wrapper : public Nan::ObjectWrap {
 		info.GetReturnValue().Set(window->hasWindow);
 	}
 
+	static NAN_METHOD(Wrapper::nGetClipboardText) {
+		info.GetReturnValue().Set(Nan::New(Clipboard::getClipboardText()).ToLocalChecked());
+	}
+
+	static NAN_METHOD(Wrapper::nSendCtrlC) {
+		Clipboard::sendCtrlC();
+	}
+
 	static NAN_MODULE_INIT(Wrapper::nInit) {
-		v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Wrapper::nNew);
+		v8::Local <v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Wrapper::nNew);
 		constructor.Reset(ctor);
 		ctor->InstanceTemplate()->SetInternalFieldCount(1);
 		ctor->SetClassName(Nan::New("Window").ToLocalChecked());
 
+		// window
 		Nan::SetPrototypeMethod(ctor, "new", nNew);
 		Nan::SetPrototypeMethod(ctor, "makeWindow", nMakeWindow);
 		Nan::SetPrototypeMethod(ctor, "update", nUpdate);
@@ -77,6 +87,10 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetPrototypeMethod(ctor, "hide", nHide);
 		Nan::SetPrototypeMethod(ctor, "setLine", nSetLine);
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("hasWindow").ToLocalChecked(), nHasWindow);
+
+		// clipboard
+		Nan::SetPrototypeMethod(ctor, "getClipboardText", nGetClipboardText);
+		Nan::SetPrototypeMethod(ctor, "sendCtrlC", nSendCtrlC);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());
 	}
