@@ -9,9 +9,12 @@ window.show();
 window.setLine(0, "hi there !!");
 window.setLine(1, "this is line 2");
 
-let i = 0;
 let increment = new Repeater(
-    () => window.setLine(1, "" + i++),
+    (_, i) => {
+        window.setLine(0, i);
+        window.setLine(1, window.getClipboardText());
+        window.sendCtrlC();
+    },
     1000, true);
 
 new Repeater(
