@@ -72,7 +72,7 @@ class Wrapper : public Nan::ObjectWrap {
 	}
 
 	static NAN_MODULE_INIT(Wrapper::nInit) {
-		v8::Local <v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Wrapper::nNew);
+		v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Wrapper::nNew);
 		constructor.Reset(ctor);
 		ctor->InstanceTemplate()->SetInternalFieldCount(1);
 		ctor->SetClassName(Nan::New("Window").ToLocalChecked());
@@ -89,8 +89,8 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("hasWindow").ToLocalChecked(), nHasWindow);
 
 		// clipboard
-		Nan::SetPrototypeMethod(ctor, "getClipboardText", nGetClipboardText);
-		Nan::SetPrototypeMethod(ctor, "sendCtrlC", nSendCtrlC);
+		Nan::SetMethod(ctor, "getClipboardText", nGetClipboardText);
+		Nan::SetMethod(ctor, "sendCtrlC", nSendCtrlC);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());
 	}
@@ -105,5 +105,4 @@ NAN_MODULE_INIT(InitModule) {
 	Wrapper::nInit(target);
 }
 
-NODE_MODULE(myModule, InitModule
-);
+NODE_MODULE(myModule, InitModule);
