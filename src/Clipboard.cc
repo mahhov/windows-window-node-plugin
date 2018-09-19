@@ -19,10 +19,11 @@ std::string Clipboard::getClipboardText() {
 void Clipboard::sendCtrlC() {
 	INPUT ctrlDown = makeKeyInput(VK_CONTROL);
 	INPUT cDown = makeKeyInput('C');
+	INPUT shiftUP = makeKeyInput(VK_SHIFT, KEYEVENTF_KEYUP);
 	INPUT ctrlUp = makeKeyInput(VK_CONTROL, KEYEVENTF_KEYUP);
 	INPUT cUp = makeKeyInput('C', KEYEVENTF_KEYUP);
-	INPUT inputs[] = {ctrlDown, cDown, ctrlUp, cUp};
-	SendInput(4, inputs, sizeof(INPUT));
+	INPUT inputs[] = {shiftUP, ctrlUp, cUp, ctrlDown, cDown, ctrlUp, cUp};
+	SendInput(7, inputs, sizeof(INPUT));
 }
 
 INPUT Clipboard::makeKeyInput(WORD vk, DWORD flags) {
