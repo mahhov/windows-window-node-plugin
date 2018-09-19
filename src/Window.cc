@@ -51,13 +51,13 @@ void Window::setLines(int lineCount, int lineHeight) {
 
 void Window::show() {
 	visible = true;
-	ShowWindow(hwnd, 1);
+	ShowWindow(hwnd, SW_SHOWNORMAL);
 	markDrawDirty();
 }
 
 void Window::hide() {
 	visible = false;
-	ShowWindow(hwnd, 0);
+	ShowWindow(hwnd, SW_HIDE);
 }
 
 void Window::setLine(int index, std::string line) {
