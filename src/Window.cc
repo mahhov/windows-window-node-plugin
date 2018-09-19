@@ -50,11 +50,13 @@ void Window::setLines(int lineCount, int lineHeight) {
 }
 
 void Window::show() {
+	visible = true;
 	ShowWindow(hwnd, 1);
 	markDrawDirty();
 }
 
 void Window::hide() {
+	visible = false;
 	ShowWindow(hwnd, 0);
 }
 

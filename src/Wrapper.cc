@@ -57,6 +57,12 @@ class Wrapper : public Nan::ObjectWrap {
 		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]));
 	}
 
+	static NAN_GETTER(Wrapper::nVisible) {
+		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = windowWrap->window;
+		info.GetReturnValue().Set(window->visible);
+	}
+
 	static NAN_GETTER(Wrapper::nHasWindow) {
 		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
 		Window* window = windowWrap->window;
@@ -86,6 +92,7 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetPrototypeMethod(ctor, "show", nShow);
 		Nan::SetPrototypeMethod(ctor, "hide", nHide);
 		Nan::SetPrototypeMethod(ctor, "setLine", nSetLine);
+		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("visible").ToLocalChecked(), nVisible);
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("hasWindow").ToLocalChecked(), nHasWindow);
 
 		// clipboard
