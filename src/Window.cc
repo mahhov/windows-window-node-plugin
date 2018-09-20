@@ -73,9 +73,8 @@ void Window::draw(HWND hwnd) {
 	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hwnd, &ps);
 
-	// FillRect(hdc, &ps.rcPaint, (HBRUSH) (COLOR_WINDOW + 1));
-	for (int i = 0; i != lines.size(); i++) { // todo try using lines.size_type
-		auto myRect = RECT{0, i * lineHeight, width, (i + 1) * lineHeight};
+	for (int i = 0; i != lines.size(); i++) {
+		RECT myRect{0, i * lineHeight, width, (i + 1) * lineHeight};
 		LPCSTR text = lines[i].c_str();
 		DrawText(hdc, text, -1, &myRect, 0);
 	}
