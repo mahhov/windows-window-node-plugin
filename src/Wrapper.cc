@@ -1,6 +1,7 @@
 #include <nan.h>
+#include <windows.h>
 #include "Window.h"
-#include "Clipboard.h"
+#include "Utility.h"
 
 class Wrapper : public Nan::ObjectWrap {
   public:
@@ -70,11 +71,20 @@ class Wrapper : public Nan::ObjectWrap {
 	}
 
 	static NAN_METHOD(Wrapper::nGetClipboardText) {
-		info.GetReturnValue().Set(Nan::New(Clipboard::getClipboardText()).ToLocalChecked());
+		info.GetReturnValue().Set(Nan::New(Utility::getClipboardText()).ToLocalChecked());
 	}
 
-	static NAN_METHOD(Wrapper::nSendCtrlC) {
-		Clipboard::sendCtrlC();
+	static NAN_METHOD(Wrapper::nSendKeys) {
+		std::vector<std::vector<WORD>> results;
+		v8::Local<v8::Array> outer = v8::Local<v8::Array>::Cast(info[0]);
+		for (unsigned int i = 0; i < outer->Length(); i++) {
+			std::vector<WORD> resultsInner;
+			v8::Local<v8::Array> inner = v8::Local<v8::Array>::Cast(outer->Get(i));
+			for (unsigned int j = 0; j < inner->Length(); j++)
+				resultsInner.push_back(static_cast<WORD>(inner->Get(j)->Int32Value()));
+			results.push_back(resultsInner);
+		}
+		Utility::sendKeys(results);
 	}
 
 	static NAN_MODULE_INIT(Wrapper::nInit) {
@@ -95,9 +105,9 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("visible").ToLocalChecked(), nVisible);
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("hasWindow").ToLocalChecked(), nHasWindow);
 
-		// clipboard
+		// utility
 		Nan::SetMethod(ctor, "getClipboardText", nGetClipboardText);
-		Nan::SetMethod(ctor, "sendCtrlC", nSendCtrlC);
+		Nan::SetMethod(ctor, "sendKeys", nSendKeys);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());
 	}
