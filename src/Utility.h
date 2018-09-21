@@ -9,6 +9,10 @@ class Utility {
   public:
 	static std::string getClipboardText();
 
+	static void setClipboardText(std::string text);
+
+	static void clearClipboardText();
+
 	static void sendKeys(std::vector<std::vector<WORD>> vkss);
 
 	static POINT mousePosition();

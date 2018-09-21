@@ -74,6 +74,14 @@ class Wrapper : public Nan::ObjectWrap {
 		info.GetReturnValue().Set(Nan::New(Utility::getClipboardText()).ToLocalChecked());
 	}
 
+	static NAN_METHOD(Wrapper::nSetClipboardText) {
+		Utility::setClipboardText(*Nan::Utf8String(info[0]));
+	}
+
+	static NAN_METHOD(Wrapper::nClearClipboardText) {
+		Utility::clearClipboardText();
+	}
+
 	static NAN_METHOD(Wrapper::nSendKeys) {
 		std::vector<std::vector<WORD>> keys;
 		v8::Local<v8::Array> inputs = v8::Local<v8::Array>::Cast(info[0]);
@@ -115,6 +123,8 @@ class Wrapper : public Nan::ObjectWrap {
 
 		// utility
 		Nan::SetMethod(ctor, "getClipboardText", nGetClipboardText);
+		Nan::SetMethod(ctor, "setClipboardText", nSetClipboardText);
+		Nan::SetMethod(ctor, "clearClipboardText", nClearClipboardText);
 		Nan::SetMethod(ctor, "sendKeys", nSendKeys);
 		Nan::SetMethod(ctor, "mousePosition", nMousePosition);
 

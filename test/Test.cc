@@ -11,7 +11,7 @@ int main() {
 
 	int i = 0;
 	while (window.hasWindow) {
-		window.setLine(1, std::to_string(i++));
+		// window.setLine(1, std::to_string(i++));
 		window.update();
 	}
 }

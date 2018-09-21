@@ -16,6 +16,27 @@ std::string Utility::getClipboardText() {
 	return text;
 }
 
+void Utility::setClipboardText(std::string text) {
+	OpenClipboard(nullptr);
+	EmptyClipboard();
+	HGLOBAL hg = GlobalAlloc(GMEM_MOVEABLE, text.size() + 1);
+	if (!hg) {
+		CloseClipboard();
+		return;
+	}
+	memcpy(GlobalLock(hg), text.c_str(), text.size() + 1);
+	GlobalUnlock(hg);
+	SetClipboardData(CF_TEXT, hg);
+	CloseClipboard();
+	GlobalFree(hg);
+}
+
+void Utility::clearClipboardText() {
+	OpenClipboard(nullptr);
+	EmptyClipboard();
+	CloseClipboard();
+}
+
 void Utility::sendKeys(std::vector<std::vector<WORD>> vkss) {
 	std::vector<INPUT> inputs;
 	bool up = true;
