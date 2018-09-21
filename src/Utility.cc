@@ -48,6 +48,13 @@ void Utility::sendKeys(std::vector<std::vector<WORD>> vkss) {
 	SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
 
+std::pair<LONG, LONG> Utility::screenSize() {
+	HWND hDesktop = GetDesktopWindow();
+	RECT desktop;
+	GetWindowRect(hDesktop, &desktop);
+	return {desktop.right, desktop.bottom};
+}
+
 POINT Utility::mousePosition() {
 	POINT mousePosition;
 	GetCursorPos(&mousePosition);

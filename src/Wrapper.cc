@@ -95,8 +95,16 @@ class Wrapper : public Nan::ObjectWrap {
 		Utility::sendKeys(keys);
 	}
 
+	static NAN_METHOD(Wrapper::nScreenSize) {
+		std::pair<LONG, LONG> mouse = Utility::screenSize();
+		v8::Local<v8::Array> outputs = Nan::New<v8::Array>(2);
+		outputs->Set(0, Nan::New((int) mouse.first)); // todo use correct cast + why do we need cast?
+		outputs->Set(1, Nan::New((int) mouse.second));
+		info.GetReturnValue().Set(outputs);
+	}
+
 	static NAN_METHOD(Wrapper::nMousePosition) {
-		auto mouse = Utility::mousePosition();
+		POINT mouse = Utility::mousePosition();
 		v8::Local<v8::Array> outputs = Nan::New<v8::Array>(2);
 		outputs->Set(0, Nan::New((int) mouse.x)); // todo use correct cast + why do we need cast?
 		outputs->Set(1, Nan::New((int) mouse.y));
@@ -126,6 +134,7 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetMethod(ctor, "setClipboardText", nSetClipboardText);
 		Nan::SetMethod(ctor, "clearClipboardText", nClearClipboardText);
 		Nan::SetMethod(ctor, "sendKeys", nSendKeys);
+		Nan::SetMethod(ctor, "screenSize", nScreenSize);
 		Nan::SetMethod(ctor, "mousePosition", nMousePosition);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());

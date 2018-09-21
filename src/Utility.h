@@ -15,6 +15,8 @@ class Utility {
 
 	static void sendKeys(std::vector<std::vector<WORD>> vkss);
 
+	static std::pair<LONG, LONG> screenSize();
+
 	static POINT mousePosition();
 
   private:
