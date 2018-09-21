@@ -27,6 +27,12 @@ void Utility::sendKeys(std::vector<std::vector<WORD>> vkss) {
 	SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
 
+POINT Utility::mousePosition() {
+	POINT mousePosition;
+	GetCursorPos(&mousePosition);
+	return mousePosition;
+}
+
 INPUT Utility::makeKeyInput(WORD vk, bool up) {
 	INPUT input = {INPUT_KEYBOARD};
 	input.ki = {vk, 0, up ? KEYEVENTF_KEYUP : static_cast<DWORD>(0), 0, 0};

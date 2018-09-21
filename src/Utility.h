@@ -11,6 +11,8 @@ class Utility {
 
 	static void sendKeys(std::vector<std::vector<WORD>> vkss);
 
+	static POINT mousePosition();
+
   private:
 	static INPUT makeKeyInput(WORD vk, bool up = false);
 };

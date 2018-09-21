@@ -75,16 +75,24 @@ class Wrapper : public Nan::ObjectWrap {
 	}
 
 	static NAN_METHOD(Wrapper::nSendKeys) {
-		std::vector<std::vector<WORD>> results;
-		v8::Local<v8::Array> outer = v8::Local<v8::Array>::Cast(info[0]);
-		for (unsigned int i = 0; i < outer->Length(); i++) {
-			std::vector<WORD> resultsInner;
-			v8::Local<v8::Array> inner = v8::Local<v8::Array>::Cast(outer->Get(i));
+		std::vector<std::vector<WORD>> keys;
+		v8::Local<v8::Array> inputs = v8::Local<v8::Array>::Cast(info[0]);
+		for (unsigned int i = 0; i < inputs->Length(); i++) {
+			std::vector<WORD> keysInner;
+			v8::Local<v8::Array> inner = v8::Local<v8::Array>::Cast(inputs->Get(i));
 			for (unsigned int j = 0; j < inner->Length(); j++)
-				resultsInner.push_back(static_cast<WORD>(inner->Get(j)->Int32Value()));
-			results.push_back(resultsInner);
+				keysInner.push_back(static_cast<WORD>(inner->Get(j)->Int32Value()));
+			keys.push_back(keysInner);
 		}
-		Utility::sendKeys(results);
+		Utility::sendKeys(keys);
+	}
+
+	static NAN_METHOD(Wrapper::nMousePosition) {
+		auto mouse = Utility::mousePosition();
+		v8::Local<v8::Array> outputs = Nan::New<v8::Array>(2);
+		outputs->Set(0, Nan::New((int) mouse.x)); // todo use correct cast + why do we need cast?
+		outputs->Set(1, Nan::New((int) mouse.y));
+		info.GetReturnValue().Set(outputs);
 	}
 
 	static NAN_MODULE_INIT(Wrapper::nInit) {
@@ -108,6 +116,7 @@ class Wrapper : public Nan::ObjectWrap {
 		// utility
 		Nan::SetMethod(ctor, "getClipboardText", nGetClipboardText);
 		Nan::SetMethod(ctor, "sendKeys", nSendKeys);
+		Nan::SetMethod(ctor, "mousePosition", nMousePosition);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());
 	}
