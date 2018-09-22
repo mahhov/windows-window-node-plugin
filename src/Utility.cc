@@ -49,9 +49,9 @@ void Utility::sendKeys(std::vector<std::vector<WORD>> vkss) {
 }
 
 std::pair<LONG, LONG> Utility::screenSize() {
-	HWND hDesktop = GetDesktopWindow();
+	HWND hwnd = GetDesktopWindow();
 	RECT desktop;
-	GetWindowRect(hDesktop, &desktop);
+	GetWindowRect(hwnd, &desktop);
 	return {desktop.right, desktop.bottom};
 }
 
@@ -59,6 +59,13 @@ POINT Utility::mousePosition() {
 	POINT mousePosition;
 	GetCursorPos(&mousePosition);
 	return mousePosition;
+}
+
+std::string Utility::foregroundTitle() {
+	HWND hwnd = GetForegroundWindow();
+	char windowTitle[256];
+	GetWindowText(hwnd, windowTitle, sizeof(windowTitle));
+	return windowTitle;
 }
 
 INPUT Utility::makeKeyInput(WORD vk, bool up) {

@@ -71,7 +71,8 @@ class Wrapper : public Nan::ObjectWrap {
 	}
 
 	static NAN_METHOD(Wrapper::nGetClipboardText) {
-		info.GetReturnValue().Set(Nan::New(Utility::getClipboardText()).ToLocalChecked());
+		std::string clipboardText = Utility::getClipboardText();
+		info.GetReturnValue().Set(Nan::New(clipboardText).ToLocalChecked());
 	}
 
 	static NAN_METHOD(Wrapper::nSetClipboardText) {
@@ -111,6 +112,11 @@ class Wrapper : public Nan::ObjectWrap {
 		info.GetReturnValue().Set(outputs);
 	}
 
+	static NAN_METHOD(Wrapper::nForegroundTitle) {
+		std::string title = Utility::foregroundTitle();
+		info.GetReturnValue().Set(Nan::New(title).ToLocalChecked());
+	}
+
 	static NAN_MODULE_INIT(Wrapper::nInit) {
 		v8::Local<v8::FunctionTemplate> ctor = Nan::New<v8::FunctionTemplate>(Wrapper::nNew);
 		constructor.Reset(ctor);
@@ -136,6 +142,7 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetMethod(ctor, "sendKeys", nSendKeys);
 		Nan::SetMethod(ctor, "screenSize", nScreenSize);
 		Nan::SetMethod(ctor, "mousePosition", nMousePosition);
+		Nan::SetMethod(ctor, "foregroundTitle", nForegroundTitle);
 
 		target->Set(Nan::New("Window").ToLocalChecked(), ctor->GetFunction());
 	}

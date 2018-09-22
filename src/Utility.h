@@ -19,6 +19,8 @@ class Utility {
 
 	static POINT mousePosition();
 
+	static std::string foregroundTitle();
+
   private:
 	static INPUT makeKeyInput(WORD vk, bool up = false);
 };
