@@ -12,8 +12,7 @@ window.setLine(1, "this is line 2");
 let increment = new Repeater(
     (_, i) => {
         window.setLine(0, i);
-        window.setLine(1, window.getClipboardText());
-        window.sendCtrlC();
+        window.setLine(1, Window.getClipboardText());
     },
     1000, true);
 

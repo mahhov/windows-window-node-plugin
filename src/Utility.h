@@ -25,4 +25,4 @@ class Utility {
 	static INPUT makeKeyInput(WORD vk, bool up = false);
 };
 
-#endif //WINDOWSPLUGIN_UTILITY_H
+#endif

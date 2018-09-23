@@ -1,5 +1,7 @@
 #include "Window.h"
+#include "shellapi.h"
 
+const int WM_TOOLTIP = WM_USER;
 const char windowClassName[] = "myWindowClass";
 
 void Window::makeWindow() {
@@ -86,6 +88,15 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	switch (msg) {
 		case WM_NCCREATE:
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) ((CREATESTRUCT*) lParam)->lpCreateParams);
+			// system tray
+			NOTIFYICONDATA nid;
+			nid.cbSize = sizeof(NOTIFYICONDATA);
+			nid.hWnd = hwnd;
+			nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+			nid.uCallbackMessage = WM_TOOLTIP;
+			nid.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+			lstrcpy(nid.szTip, "Test Tip"); // todo programmable tooltip
+			Shell_NotifyIcon(NIM_ADD, &nid);
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
@@ -98,9 +109,13 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		}
 		case WM_PAINT: {
 			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
-			window->draw(hwnd);
+			window->draw(hwnd); // todo can draw use winodw.hwnd instead?
 			break;
 		}
+		case WM_TOOLTIP:
+			if (lParam == WM_RBUTTONUP || lParam == WM_MBUTTONUP || lParam == WM_LBUTTONUP)
+				DestroyWindow(hwnd);
+			break;
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
