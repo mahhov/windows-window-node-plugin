@@ -27,7 +27,7 @@ class Window {
   private:
 	void markDrawDirty();
 
-	void draw(HWND hwnd);
+	void draw();
 
 	static LRESULT CALLBACK process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

@@ -71,7 +71,7 @@ void Window::markDrawDirty() {
 	RedrawWindow(hwnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW);
 }
 
-void Window::draw(HWND hwnd) {
+void Window::draw() {
 	PAINTSTRUCT ps;
 	HDC hdc = BeginPaint(hwnd, &ps);
 
@@ -109,7 +109,7 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		}
 		case WM_PAINT: {
 			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
-			window->draw(hwnd); // todo can draw use winodw.hwnd instead?
+			window->draw();
 			break;
 		}
 		case WM_TOOLTIP:
