@@ -7,6 +7,8 @@
 
 class Window {
   public:
+	Window(std::string name);
+
 	void makeWindow();
 
 	void update();
@@ -25,6 +27,7 @@ class Window {
 	bool hasWindow{};
 
   private:
+	void addSystemTrayIcon();
 
 	void markDrawDirty();
 
@@ -32,9 +35,8 @@ class Window {
 
 	static LRESULT CALLBACK process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	static void addSystemTrayIcon(HWND hwnd);
-
 	HWND hwnd;
+	std::string name;
 	int width, lineHeight;
 	std::vector<std::string> lines;
 };

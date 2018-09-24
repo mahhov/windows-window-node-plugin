@@ -5,13 +5,14 @@
 
 class Wrapper : public Nan::ObjectWrap {
   public:
-	Wrapper() : window(new Window()) {}
+	Wrapper() {}
 
 	static NAN_METHOD(Wrapper::nNew) {
 		if (!info.IsConstructCall())
 			return Nan::ThrowError(Nan::New("use new keyword").ToLocalChecked());
 
 		Wrapper* windowWrap = new Wrapper(); // todo smart pointer?
+		windowWrap->window = new Window(*Nan::Utf8String(info[0]));
 		windowWrap->Wrap(info.Holder());
 		info.GetReturnValue().Set(info.Holder());
 	}

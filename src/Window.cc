@@ -4,6 +4,8 @@
 const int WM_TOOLTIP = WM_USER;
 const char windowClassName[] = "myWindowClass";
 
+Window::Window(std::string name) : name(std::move(name)) {}
+
 void Window::makeWindow() {
 	HINSTANCE hInstance = GetModuleHandle(0);
 	WNDCLASSEX windowClass;
@@ -29,6 +31,8 @@ void Window::makeWindow() {
 		WS_POPUP | WS_BORDER,
 		0, 0, 0, 0,
 		NULL, NULL, hInstance, this);
+
+	addSystemTrayIcon();
 
 	hasWindow = true;
 }
@@ -67,6 +71,18 @@ void Window::setLine(int index, std::string line) {
 	markDrawDirty();
 }
 
+void Window::addSystemTrayIcon() {
+	NOTIFYICONDATA nid;
+	nid.uID = 0;
+	nid.cbSize = sizeof(NOTIFYICONDATA);
+	nid.hWnd = hwnd;
+	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+	nid.uCallbackMessage = WM_TOOLTIP;
+	nid.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+	lstrcpy(nid.szTip, name.c_str());
+	Shell_NotifyIcon(NIM_ADD, &nid);
+}
+
 void Window::markDrawDirty() {
 	RedrawWindow(hwnd, NULL, NULL, RDW_ERASE | RDW_INVALIDATE | RDW_UPDATENOW);
 }
@@ -88,7 +104,6 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	switch (msg) {
 		case WM_NCCREATE:
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) ((CREATESTRUCT*) lParam)->lpCreateParams);
-			addSystemTrayIcon(hwnd);
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
@@ -114,14 +129,5 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	return 0;
 }
 
-void Window::addSystemTrayIcon(HWND hwnd) {
-	NOTIFYICONDATA nid;
-	nid.uID = 0;
-	nid.cbSize = sizeof(NOTIFYICONDATA);
-	nid.hWnd = hwnd;
-	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-	nid.uCallbackMessage = WM_TOOLTIP;
-	nid.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-	lstrcpy(nid.szTip, "Test Tip"); // todo programmable tooltip
-	Shell_NotifyIcon(NIM_ADD, &nid);
-}
+// todo sys tray callback
+// todo key event handling

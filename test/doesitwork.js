@@ -1,7 +1,7 @@
 let Repeater = require('function-repeater');
 let {Window} = require('../src/index');
 
-let window = new Window();
+let window = new Window("elephant");
 window.makeWindow();
 window.setGeometry(100, 100, 250, 40);
 window.setLines(2, 20);

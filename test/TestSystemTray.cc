@@ -2,7 +2,7 @@
 #include "../src/Window.h"
 
 int main() {
-	Window window;
+	Window window("hi");
 	window.makeWindow();
 
 	while (window.hasWindow)
