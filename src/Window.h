@@ -25,11 +25,14 @@ class Window {
 	bool hasWindow;
 
   private:
+
 	void markDrawDirty();
 
 	void draw();
 
 	static LRESULT CALLBACK process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	static void addSystemTrayIcon(HWND hwnd);
 
 	HWND hwnd;
 	int width, lineHeight;

@@ -88,15 +88,7 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	switch (msg) {
 		case WM_NCCREATE:
 			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR) ((CREATESTRUCT*) lParam)->lpCreateParams);
-			// system tray
-			NOTIFYICONDATA nid;
-			nid.cbSize = sizeof(NOTIFYICONDATA);
-			nid.hWnd = hwnd;
-			nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
-			nid.uCallbackMessage = WM_TOOLTIP;
-			nid.hIcon = LoadIcon(NULL, IDI_WINLOGO);
-			lstrcpy(nid.szTip, "Test Tip"); // todo programmable tooltip
-			Shell_NotifyIcon(NIM_ADD, &nid);
+			addSystemTrayIcon(hwnd);
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 		case WM_CLOSE:
 			DestroyWindow(hwnd);
@@ -120,4 +112,16 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	return 0;
+}
+
+void Window::addSystemTrayIcon(HWND hwnd) {
+	NOTIFYICONDATA nid;
+	nid.uID = 0;
+	nid.cbSize = sizeof(NOTIFYICONDATA);
+	nid.hWnd = hwnd;
+	nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+	nid.uCallbackMessage = WM_TOOLTIP;
+	nid.hIcon = LoadIcon(NULL, IDI_WINLOGO);
+	lstrcpy(nid.szTip, "Test Tip"); // todo programmable tooltip
+	Shell_NotifyIcon(NIM_ADD, &nid);
 }
