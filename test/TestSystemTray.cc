@@ -5,9 +5,8 @@ int main() {
 	Window window;
 	window.makeWindow();
 
-	while (window.hasWindow) {
+	while (window.hasWindow)
 		window.update();
-	}
 }
 
 // g++ -lgdi32 src\Window.cc test\TestSystemTray.cc && a.exe

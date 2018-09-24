@@ -21,8 +21,8 @@ class Window {
 
 	void setLine(int index, std::string line);
 
-	bool visible;
-	bool hasWindow;
+	bool visible{};
+	bool hasWindow{};
 
   private:
 
