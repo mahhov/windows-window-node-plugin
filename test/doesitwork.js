@@ -9,6 +9,10 @@ window.show();
 window.setLine(0, "hi there !!");
 window.setLine(1, "this is line 2");
 
+window.setSystemTrayCallback(() => {
+    console.log('whats up')
+});
+
 let increment = new Repeater(
     (_, i) => {
         window.setLine(0, i);

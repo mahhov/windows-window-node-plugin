@@ -4,12 +4,17 @@
 #include <windows.h>
 #include <string>
 #include <vector>
+#include <functional>
 
 class Window {
   public:
-	Window(std::string name);
+	explicit Window(std::string name);
 
 	void makeWindow();
+
+	void destroyWindow();
+
+	void setSystemTrayCallback(std::function<void()> callback);
 
 	void update();
 
@@ -37,6 +42,7 @@ class Window {
 
 	HWND hwnd;
 	std::string name;
+	std::function<void()> systemTrayCallback;
 	int width, lineHeight;
 	std::vector<std::string> lines;
 };

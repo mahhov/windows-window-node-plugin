@@ -23,6 +23,23 @@ class Wrapper : public Nan::ObjectWrap {
 		window->makeWindow();
 	}
 
+	static NAN_METHOD(nDestroyWindow) {
+		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = windowWrap->window;
+		window->destroyWindow();
+	}
+
+	static NAN_METHOD(nSetSystemTrayCallback) {
+		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		windowWrap->systemTrayCallback.Reset(info[0].As<v8::Function>());
+		std::function<void()> callback = [windowWrap]() {
+			Nan::Call(windowWrap->systemTrayCallback, 0, nullptr);
+		};
+
+		Window* window = windowWrap->window;
+		window->setSystemTrayCallback(callback);
+	}
+
 	static NAN_METHOD(Wrapper::nUpdate) {
 		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
 		Window* window = windowWrap->window;
@@ -86,10 +103,10 @@ class Wrapper : public Nan::ObjectWrap {
 
 	static NAN_METHOD(Wrapper::nSendKeys) {
 		std::vector<std::vector<WORD>> keys;
-		v8::Local<v8::Array> inputs = v8::Local<v8::Array>::Cast(info[0]);
+		v8::Local<v8::Array> inputs = info[0].As<v8::Array>();
 		for (unsigned int i = 0; i < inputs->Length(); i++) {
 			std::vector<WORD> keysInner;
-			v8::Local<v8::Array> inner = v8::Local<v8::Array>::Cast(inputs->Get(i));
+			v8::Local<v8::Array> inner = inputs->Get(i).As<v8::Array>();
 			for (unsigned int j = 0; j < inner->Length(); j++)
 				keysInner.push_back(static_cast<WORD>(inner->Get(j)->Int32Value()));
 			keys.push_back(keysInner);
@@ -127,6 +144,8 @@ class Wrapper : public Nan::ObjectWrap {
 		// window
 		Nan::SetPrototypeMethod(ctor, "new", nNew);
 		Nan::SetPrototypeMethod(ctor, "makeWindow", nMakeWindow);
+		Nan::SetPrototypeMethod(ctor, "destroyWindow", nDestroyWindow);
+		Nan::SetPrototypeMethod(ctor, "setSystemTrayCallback", nSetSystemTrayCallback);
 		Nan::SetPrototypeMethod(ctor, "update", nUpdate);
 		Nan::SetPrototypeMethod(ctor, "setGeometry", nSetGeometry);
 		Nan::SetPrototypeMethod(ctor, "setLines", nSetLines);
@@ -149,6 +168,7 @@ class Wrapper : public Nan::ObjectWrap {
 	}
 
 	Window* window;
+	Nan::Callback systemTrayCallback;
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 

@@ -37,6 +37,14 @@ void Window::makeWindow() {
 	hasWindow = true;
 }
 
+void Window::destroyWindow() {
+	DestroyWindow(hwnd);
+}
+
+void Window::setSystemTrayCallback(std::function<void()> callback) {
+	systemTrayCallback = std::move(callback);
+}
+
 void Window::update() {
 	MSG msg;
 	if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -119,10 +127,14 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 			window->draw();
 			break;
 		}
-		case WM_TOOLTIP:
-			if (lParam == WM_RBUTTONUP || lParam == WM_MBUTTONUP || lParam == WM_LBUTTONUP)
-				DestroyWindow(hwnd);
+		case WM_TOOLTIP: {
+			if (lParam == WM_RBUTTONUP || lParam == WM_MBUTTONUP || lParam == WM_LBUTTONUP) {
+				Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+				if (window->systemTrayCallback != NULL)
+					window->systemTrayCallback();
+			}
 			break;
+		}
 		default:
 			return DefWindowProc(hwnd, msg, wParam, lParam);
 	}

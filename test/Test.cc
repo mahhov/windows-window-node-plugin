@@ -1,7 +1,14 @@
 #include "../src/Window.h"
+#include <string>
 
 int main() {
-	Window window;
+	Window window("Test.cc");
+
+	std::function<void()> callback = []() {
+		printf("CLICK ME\n");
+	};
+	window.setSystemTrayCallback(callback);
+
 	window.makeWindow();
 	window.setGeometry(100, 100, 250, 40);
 	window.setLines(2, 20);
