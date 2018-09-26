@@ -37,14 +37,22 @@ void Utility::clearClipboardText() {
 	CloseClipboard();
 }
 
-void Utility::sendKeys(std::vector<std::vector<WORD>> vkss) {
+void Utility::sendKeys(std::vector<std::pair<SendKeysState, std::vector<WORD>>> vkss) {
 	std::vector<INPUT> inputs;
-	bool up = true;
-	for (auto vks : vkss) {
-		for (auto vk : vks)
-			inputs.push_back(makeKeyInput(vk, up));
-		up = !up;
-	}
+	for (auto vks : vkss)
+		for (auto vk : vks.second)
+			switch (vks.first) {
+				case UP:
+					inputs.push_back(makeKeyInput(vk, true));
+					break;
+				case DOWN:
+					inputs.push_back(makeKeyInput(vk, false));
+					break;
+				case TYPE:
+					inputs.push_back(makeKeyInput(vk, false));
+					inputs.push_back(makeKeyInput(vk, true));
+					break;
+			}
 	SendInput(inputs.size(), inputs.data(), sizeof(INPUT));
 }
 

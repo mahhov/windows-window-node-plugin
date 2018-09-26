@@ -1,1 +1,1 @@
-g++ -lgdi32 ..\src\Window.cc TestSystemTray.cc && a.exe
+g++ -lgdi32 src\Utility.cc test\TestSendInput.cc && a.exe

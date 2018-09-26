@@ -102,16 +102,18 @@ class Wrapper : public Nan::ObjectWrap {
 	}
 
 	static NAN_METHOD(Wrapper::nSendKeys) {
-		std::vector<std::vector<WORD>> keys;
+		std::vector<std::pair<Utility::SendKeysState, std::vector<WORD>>> sendKeys;
 		v8::Local<v8::Array> inputs = info[0].As<v8::Array>();
 		for (unsigned int i = 0; i < inputs->Length(); i++) {
-			std::vector<WORD> keysInner;
-			v8::Local<v8::Array> inner = inputs->Get(i).As<v8::Array>();
-			for (unsigned int j = 0; j < inner->Length(); j++)
-				keysInner.push_back(static_cast<WORD>(inner->Get(j)->Int32Value()));
-			keys.push_back(keysInner);
+			v8::Local<v8::Array> input = inputs->Get(i).As<v8::Array>();
+			auto state = static_cast<Utility::SendKeysState>(input->Get(0)->Int32Value());
+			v8::Local<v8::Array> inputKeys = input->Get(1).As<v8::Array>();
+			std::vector<WORD> keys;
+			for (unsigned int j = 0; j < inputKeys->Length(); j++)
+				keys.push_back(static_cast<WORD>(inputKeys->Get(j)->Int32Value()));
+			sendKeys.push_back({state, keys});
 		}
-		Utility::sendKeys(keys);
+		Utility::sendKeys(sendKeys);
 	}
 
 	static NAN_METHOD(Wrapper::nScreenSize) {

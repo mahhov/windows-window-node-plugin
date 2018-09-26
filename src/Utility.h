@@ -7,13 +7,17 @@
 
 class Utility {
   public:
+	enum SendKeysState {
+		UP, DOWN, TYPE
+	};
+
 	static std::string getClipboardText();
 
 	static void setClipboardText(std::string text);
 
 	static void clearClipboardText();
 
-	static void sendKeys(std::vector<std::vector<WORD>> vkss);
+	static void sendKeys(std::vector<std::pair<SendKeysState, std::vector<WORD>>> vkss);
 
 	static std::pair<LONG, LONG> screenSize();
 

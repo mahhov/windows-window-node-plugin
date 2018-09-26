@@ -8,6 +8,7 @@
     "configure": "node-gyp configure",
     "build": "node-gyp build",
     "test": "node test/doesitwork",
+    "ctest": "test\\testRun.bat",
     "install": "node-gyp rebuild",
     "postversion": "git push && git push --tags && npm publish"
   },
