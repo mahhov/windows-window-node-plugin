@@ -130,7 +130,7 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		case WM_TOOLTIP: {
 			if (lParam == WM_RBUTTONUP || lParam == WM_MBUTTONUP || lParam == WM_LBUTTONUP) {
 				Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
-				if (window->systemTrayCallback != NULL)
+				if (window->systemTrayCallback != nullptr)
 					window->systemTrayCallback();
 			}
 			break;

@@ -1,1 +1,1 @@
-g++ -lgdi32 src\Utility.cc test\TestSendInput.cc && a.exe
+g++ -lgdi32 test\TestHotkey.cc src\Utility.cc && a.exe

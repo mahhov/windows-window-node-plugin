@@ -157,6 +157,9 @@ class Wrapper : public Nan::ObjectWrap {
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("visible").ToLocalChecked(), nVisible);
 		Nan::SetAccessor(ctor->InstanceTemplate(), Nan::New("hasWindow").ToLocalChecked(), nHasWindow);
 
+		// key catcher
+
+
 		// utility
 		Nan::SetMethod(ctor, "getClipboardText", nGetClipboardText);
 		Nan::SetMethod(ctor, "setClipboardText", nSetClipboardText);

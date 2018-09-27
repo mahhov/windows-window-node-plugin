@@ -1,42 +1,74 @@
 #include <stdio.h>
 #include <Windows.h>
+#include "../src/Utility.h"
+
+const WORD VK_C = 67;
+bool ctrl = false;
+bool shift = false;
+bool repeat = false;
+
+void handle();
+
 
 LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam) {
-	BOOL fEatKeystroke = FALSE;
+	bool consume = false;
 
 	if (nCode == HC_ACTION) {
+		PKBDLLHOOKSTRUCT p = (PKBDLLHOOKSTRUCT) lParam;
 		switch (wParam) {
-			case WM_KEYDOWN:
-			case WM_SYSKEYDOWN:
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
-				PKBDLLHOOKSTRUCT p = (PKBDLLHOOKSTRUCT) lParam;
-				if (fEatKeystroke = (p->vkCode == 0x41)) {     //redirect a to b
-					printf("Hello a\n");
-					keybd_event('B', 0, 0, 0);
-					keybd_event('B', 0, KEYEVENTF_KEYUP, 0);
-					break;
+				switch (p->vkCode) {
+					case VK_LCONTROL:
+						ctrl = false;
+						break;
+					case VK_LSHIFT:
+						shift = false;
+						break;
+					case VK_C:
+						repeat = false;
+						break;
 				}
 				break;
+			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
+				switch (p->vkCode) {
+					case VK_LCONTROL:
+						ctrl = true;
+						break;
+					case VK_LSHIFT:
+						shift = true;
+						break;
+					case VK_C:
+						consume = ctrl && shift;
+						if (consume && !repeat) {
+							repeat = true;
+							handle();
+						}
+						break;
+				}
 		}
 	}
-	return (fEatKeystroke ? 1 : CallNextHookEx(NULL, nCode, wParam, lParam));
+	return consume ? 1 : CallNextHookEx(NULL, nCode, wParam, lParam);
+}
+
+void handle() {
+	std::vector<std::pair<Utility::SendKeysState, std::vector<WORD>>> vkss = {
+		// {Utility::SendKeysState::UP,   {VK_SHIFT}},
+		{Utility::SendKeysState::TYPE, {'C', 'V', 'V'}},
+		// {Utility::SendKeysState::DOWN, {VK_SHIFT}},
+	};
+	Utility::sendKeys(vkss);
 }
 
 int main() {
-	// Install the low-level keyboard & mouse hooks
-	HHOOK hhkLowLevelKybd = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, 0, 0);
-
-	// Keep this app running until we're told to stop
+	HHOOK hhkLowLevelKybd = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, NULL, 0);
 	MSG msg;
-	while (!GetMessage(&msg, NULL, NULL, NULL)) {    //this while loop keeps the hook
+	while (!GetMessage(&msg, NULL, 0, 0)) {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
-
 	UnhookWindowsHookEx(hhkLowLevelKybd);
-
-	return (0);
 }
 
-// g++ -lgdi32 test\TestKeyhook.cc && a.exe
+// g++ -lgdi32 test\TestKeyhook.cc src\Utility.cc && a.exe
