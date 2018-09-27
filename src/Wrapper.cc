@@ -11,80 +11,80 @@ class Wrapper : public Nan::ObjectWrap {
 		if (!info.IsConstructCall())
 			return Nan::ThrowError(Nan::New("use new keyword").ToLocalChecked());
 
-		Wrapper* windowWrap = new Wrapper(); // todo smart pointer?
-		windowWrap->window = new Window(*Nan::Utf8String(info[0]));
-		windowWrap->Wrap(info.Holder());
+		Wrapper* wrapper = new Wrapper(); // todo smart pointer?
+		wrapper->window = new Window(*Nan::Utf8String(info[0]));
+		wrapper->Wrap(info.Holder());
 		info.GetReturnValue().Set(info.Holder());
 	}
 
 	static NAN_METHOD(nMakeWindow) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->makeWindow();
 	}
 
 	static NAN_METHOD(nDestroyWindow) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->destroyWindow();
 	}
 
 	static NAN_METHOD(nSetSystemTrayCallback) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		windowWrap->systemTrayCallback.Reset(info[0].As<v8::Function>());
-		std::function<void()> callback = [windowWrap]() {
-			Nan::Call(windowWrap->systemTrayCallback, 0, nullptr);
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		wrapper->systemTrayCallback.Reset(info[0].As<v8::Function>());
+		std::function<void()> callback = [wrapper]() {
+			Nan::Call(wrapper->systemTrayCallback, 0, nullptr);
 		};
 
-		Window* window = windowWrap->window;
+		Window* window = wrapper->window;
 		window->setSystemTrayCallback(callback);
 	}
 
 	static NAN_METHOD(Wrapper::nUpdate) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->update();
 	}
 
 	static NAN_METHOD(Wrapper::nSetGeometry) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->setGeometry(info[0]->Int32Value(), info[1]->Int32Value(), info[2]->Int32Value(), info[3]->Int32Value());
 	}
 
 	static NAN_METHOD(Wrapper::nSetLines) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->setLines(info[0]->Int32Value(), info[1]->Int32Value());
 	}
 
 	static NAN_METHOD(Wrapper::nShow) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->show();
 	}
 
 	static NAN_METHOD(Wrapper::nHide) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->hide();
 	}
 
 	static NAN_METHOD(Wrapper::nSetLine) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]));
 	}
 
 	static NAN_GETTER(Wrapper::nVisible) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		info.GetReturnValue().Set(window->visible);
 	}
 
 	static NAN_GETTER(Wrapper::nHasWindow) {
-		Wrapper* windowWrap = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
-		Window* window = windowWrap->window;
+		Wrapper* wrapper = Nan::ObjectWrap::Unwrap<Wrapper>(info.This());
+		Window* window = wrapper->window;
 		info.GetReturnValue().Set(window->hasWindow);
 	}
 
