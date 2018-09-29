@@ -22,6 +22,8 @@ class UtilityWrapper : public Nan::ObjectWrap {
 
 	static NAN_METHOD(utilityForegroundTitle);
 
+	static NAN_GETTER(utilitySendKeyStates);
+
   private:
 	static Nan::Persistent<v8::ObjectTemplate> constructor;
 };

@@ -13,6 +13,7 @@ NAN_MODULE_INIT(UtilityWrapper::Init) {
 	Nan::SetMethod(ctor, "screenSize", utilityScreenSize);
 	Nan::SetMethod(ctor, "mousePosition", utilityMousePosition);
 	Nan::SetMethod(ctor, "foregroundTitle", utilityForegroundTitle);
+	Nan::SetAccessor(ctor, Nan::New("SendKeysState").ToLocalChecked(), utilitySendKeyStates);
 
 	target->Set(Nan::New("Utility").ToLocalChecked(), ctor->NewInstance());
 }
@@ -66,4 +67,10 @@ NAN_METHOD(UtilityWrapper::utilityForegroundTitle) {
 	info.GetReturnValue().Set(Nan::New(title).ToLocalChecked());
 }
 
-// todo getters for keystates up, down, typed
+NAN_GETTER(UtilityWrapper::utilitySendKeyStates) {
+	v8::Local<v8::Object> SendKeyStatesObj = Nan::New<v8::Object>();
+	Nan::Set(SendKeyStatesObj, Nan::New("UP").ToLocalChecked(), Nan::New(Utility::UP));
+	Nan::Set(SendKeyStatesObj, Nan::New("DOWN").ToLocalChecked(), Nan::New(Utility::DOWN));
+	Nan::Set(SendKeyStatesObj, Nan::New("TYPE").ToLocalChecked(), Nan::New(Utility::TYPE));
+	info.GetReturnValue().Set(SendKeyStatesObj);
+}

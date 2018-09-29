@@ -1,6 +1,8 @@
 let Repeater = require('function-repeater');
 let X = require('../src/index');
 
+console.log(X.Utility.SendKeysState);
+
 let keyCatcher = new X.KeyCatcher();
 keyCatcher.begin();
 
