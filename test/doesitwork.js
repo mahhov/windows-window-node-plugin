@@ -42,6 +42,6 @@ new Repeater(
         }
     }, 5, true);
 
-// todo
-// makeWindow to support window paramters
-// more layout elements and flexibility
+new Repeater(() => {
+    console.log(X.Utility.mousePosition());
+}, 100, true);

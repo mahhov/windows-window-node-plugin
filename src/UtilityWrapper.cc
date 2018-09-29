@@ -48,16 +48,16 @@ NAN_METHOD(UtilityWrapper::utilitySendKeys) {
 NAN_METHOD(UtilityWrapper::utilityScreenSize) {
 	std::pair<LONG, LONG> mouse = Utility::screenSize();
 	v8::Local<v8::Array> outputs = Nan::New<v8::Array>(2);
-	outputs->Set(0, Nan::New((int) mouse.first)); // todo use correct cast + why do we need cast?
-	outputs->Set(1, Nan::New((int) mouse.second));
+	outputs->Set(0, Nan::New<v8::Number>(mouse.first));
+	outputs->Set(1, Nan::New<v8::Number>(mouse.second));
 	info.GetReturnValue().Set(outputs);
 }
 
 NAN_METHOD(UtilityWrapper::utilityMousePosition) {
 	POINT mouse = Utility::mousePosition();
 	v8::Local<v8::Array> outputs = Nan::New<v8::Array>(2);
-	outputs->Set(0, Nan::New((int) mouse.x)); // todo use correct cast + why do we need cast?
-	outputs->Set(1, Nan::New((int) mouse.y));
+	outputs->Set(0, Nan::New<v8::Number>(mouse.x));
+	outputs->Set(1, Nan::New<v8::Number>(mouse.y));
 	info.GetReturnValue().Set(outputs);
 }
 

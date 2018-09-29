@@ -140,6 +140,3 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 	}
 	return 0;
 }
-
-// todo sys tray callback
-// todo key event handling
