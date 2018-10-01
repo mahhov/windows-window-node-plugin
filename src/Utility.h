@@ -8,7 +8,7 @@
 class Utility {
   public:
 	enum SendKeysState {
-		UP, DOWN, TYPE
+		UP, DOWN, TYPE, COMBO
 	};
 
 	static std::string getClipboardText();

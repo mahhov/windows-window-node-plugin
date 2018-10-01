@@ -3,14 +3,14 @@
 #include "../src/Utility.h"
 
 int main() {
-	WORD slash = VkKeyScanA('/'); // slash is / 191
+	WORD shift = 16; // slash is / 191
+	WORD ctrl = 17; // slash is / 191
+	WORD slash = VkKeyScanA('A'); // slash is / 191
 
 	printf("slash %d\n", slash);
 
 	std::vector<std::pair<Utility::SendKeysState, std::vector<WORD>>> vkss = {
-		{Utility::SendKeysState::DOWN, {slash}},
-		{Utility::SendKeysState::DOWN, {slash}},
-		{Utility::SendKeysState::UP, {slash}},
+		{Utility::SendKeysState::COMBO, {ctrl, slash}},
 	};
 
 	// printf("wait 1 seconds\n");

@@ -72,5 +72,6 @@ NAN_GETTER(UtilityWrapper::utilitySendKeyStates) {
 	Nan::Set(SendKeyStatesObj, Nan::New("UP").ToLocalChecked(), Nan::New(Utility::UP));
 	Nan::Set(SendKeyStatesObj, Nan::New("DOWN").ToLocalChecked(), Nan::New(Utility::DOWN));
 	Nan::Set(SendKeyStatesObj, Nan::New("TYPE").ToLocalChecked(), Nan::New(Utility::TYPE));
+	Nan::Set(SendKeyStatesObj, Nan::New("COMBO").ToLocalChecked(), Nan::New(Utility::COMBO));
 	info.GetReturnValue().Set(SendKeyStatesObj);
 }
