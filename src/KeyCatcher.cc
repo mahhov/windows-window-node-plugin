@@ -11,7 +11,7 @@ void KeyCatcher::stop() {
 	UnhookWindowsHookEx(hhook);
 }
 
-void KeyCatcher::setCallback(std::function<bool(bool down, int code)> callback) {
+void KeyCatcher::setCallback(std::function<bool(bool down, int code, bool injected)> callback) {
 	this->callback = std::move(callback);
 }
 
@@ -27,14 +27,15 @@ LRESULT CALLBACK KeyCatcher::process(int code, WPARAM wParam, LPARAM lParam) {
 	bool consume = false;
 	if (code == HC_ACTION && callbackThis != nullptr && callbackThis->callback != nullptr) {
 		KBDLLHOOKSTRUCT* event = (KBDLLHOOKSTRUCT*) lParam;
+		bool injected = event->flags & LLKHF_INJECTED;
 		switch (wParam) {
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
-				consume = callbackThis->callback(false, event->vkCode);
+				consume = callbackThis->callback(false, event->vkCode, injected);
 				break;
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
-				consume = callbackThis->callback(true, event->vkCode);
+				consume = callbackThis->callback(true, event->vkCode, injected);
 				break;
 		}
 	}

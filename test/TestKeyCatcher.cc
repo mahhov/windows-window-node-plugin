@@ -16,11 +16,12 @@ int main() {
 
 	keyCatcher.begin();
 
-	Sleep(100);
 	printf("ready\n");
 
 	while (true) {
 		keyCatcher.update();
+		// printf("in loop\n");
+		// Sleep(1000);
 	}
 }
 

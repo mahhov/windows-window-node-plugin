@@ -11,7 +11,7 @@ class KeyCatcher {
 
 	void stop();
 
-	void setCallback(std::function<bool(bool down, int code)> callback);
+	void setCallback(std::function<bool(bool down, int code, bool injected)> callback);
 
 	void update();
 
@@ -20,7 +20,7 @@ class KeyCatcher {
 
 	HHOOK hhook;
 	static KeyCatcher* callbackThis;
-	std::function<bool(bool down, int code)> callback;
+	std::function<bool(bool down, int code, bool injected)> callback;
 };
 
 
