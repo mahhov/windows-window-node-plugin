@@ -2,7 +2,6 @@
 #define WINDOWSPLUGIN_KEYCATCHER_H
 
 #include <windows.h>
-#include <Windows.h>
 #include <functional>
 
 class KeyCatcher {
