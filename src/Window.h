@@ -16,6 +16,12 @@ class Window {
 
 	void setSystemTrayCallback(std::function<void()> callback);
 
+	void beginClipboardListener();
+
+	void endClipboardListener();
+
+	void setClipboardCallback(std::function<void(std::string)> callback);
+
 	void update();
 
 	void setGeometry(int x, int y, int width, int height);
@@ -28,8 +34,8 @@ class Window {
 
 	void setLine(int index, std::string line);
 
-	bool visible{};
-	bool hasWindow{};
+	bool visible {};
+	bool hasWindow {};
 
   private:
 	void addSystemTrayIcon();
@@ -43,6 +49,7 @@ class Window {
 	HWND hwnd;
 	std::string name;
 	std::function<void()> systemTrayCallback;
+	std::function<void(std::string)> clipboardCallback;
 	int width, lineHeight;
 	std::vector<std::string> lines;
 };

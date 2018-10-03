@@ -16,6 +16,12 @@ class WindowWrapper : public Nan::ObjectWrap {
 
 	static NAN_METHOD(windowSetSystemTrayCallback);
 
+	static NAN_METHOD(windowBeginClipboardListener);
+
+	static NAN_METHOD(windowEndClipboardListener);
+
+	static NAN_METHOD(windowSetClipboardCallback);
+
 	static NAN_METHOD(windowUpdate);
 
 	static NAN_METHOD(windowSetGeometry);
@@ -35,6 +41,7 @@ class WindowWrapper : public Nan::ObjectWrap {
   private:
 	Window* window;
 	Nan::Callback systemTrayCallback;
+	Nan::Callback clipboardCallback;
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 

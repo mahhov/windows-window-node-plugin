@@ -11,6 +11,9 @@ NAN_MODULE_INIT(WindowWrapper::Init) {
 	Nan::SetPrototypeMethod(ctor, "makeWindow", windowMakeWindow);
 	Nan::SetPrototypeMethod(ctor, "destroyWindow", windowDestroyWindow);
 	Nan::SetPrototypeMethod(ctor, "setSystemTrayCallback", windowSetSystemTrayCallback);
+	Nan::SetPrototypeMethod(ctor, "beginClipboardListener", windowBeginClipboardListener);
+	Nan::SetPrototypeMethod(ctor, "endClipboardListener", windowEndClipboardListener);
+	Nan::SetPrototypeMethod(ctor, "setClipboardCallback", windowSetClipboardCallback);
 	Nan::SetPrototypeMethod(ctor, "update", windowUpdate);
 	Nan::SetPrototypeMethod(ctor, "setGeometry", windowSetGeometry);
 	Nan::SetPrototypeMethod(ctor, "setLines", windowSetLines);
@@ -55,6 +58,31 @@ NAN_METHOD(WindowWrapper::windowSetSystemTrayCallback) {
 
 	Window* window = windowWrapper->window;
 	window->setSystemTrayCallback(callback);
+}
+
+NAN_METHOD(WindowWrapper::windowBeginClipboardListener) {
+	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
+	Window* window = windowWrapper->window;
+	window->beginClipboardListener();
+}
+
+NAN_METHOD(WindowWrapper::windowEndClipboardListener) {
+	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
+	Window* window = windowWrapper->window;
+	window->endClipboardListener();
+}
+
+NAN_METHOD(WindowWrapper::windowSetClipboardCallback) {
+	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
+	windowWrapper->clipboardCallback.Reset(info[0].As<v8::Function>());
+
+	std::function<void(std::string text)> callback = [windowWrapper](std::string text) {
+		v8::Local<v8::Value> args[] {Nan::New(text).ToLocalChecked()};
+		Nan::Call(windowWrapper->clipboardCallback, 1, args);
+	};
+
+	Window* window = windowWrapper->window;
+	window->setClipboardCallback(callback);
 }
 
 NAN_METHOD(WindowWrapper::windowUpdate) {

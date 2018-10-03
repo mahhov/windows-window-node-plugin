@@ -1,5 +1,6 @@
 #include "Window.h"
-#include "shellapi.h"
+#include <shellapi.h>
+#include "Utility.h"
 
 const int WM_TOOLTIP = WM_USER;
 const char windowClassName[] = "myWindowClass";
@@ -43,6 +44,18 @@ void Window::destroyWindow() {
 
 void Window::setSystemTrayCallback(std::function<void()> callback) {
 	systemTrayCallback = std::move(callback);
+}
+
+void Window::beginClipboardListener() {
+	AddClipboardFormatListener(hwnd);
+}
+
+void Window::endClipboardListener() {
+	RemoveClipboardFormatListener(hwnd);
+}
+
+void Window::setClipboardCallback(std::function<void(std::string)> callback) {
+	clipboardCallback = std::move(callback);
 }
 
 void Window::update() {
@@ -100,7 +113,7 @@ void Window::draw() {
 	HDC hdc = BeginPaint(hwnd, &ps);
 
 	for (int i = 0; i != lines.size(); i++) {
-		RECT myRect{0, i * lineHeight, width, (i + 1) * lineHeight};
+		RECT myRect {0, i * lineHeight, width, (i + 1) * lineHeight};
 		LPCSTR text = lines[i].c_str();
 		DrawText(hdc, text, -1, &myRect, 0);
 	}
@@ -133,6 +146,12 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 				if (window->systemTrayCallback != nullptr)
 					window->systemTrayCallback();
 			}
+			break;
+		}
+		case WM_CLIPBOARDUPDATE: {
+			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			if (window->clipboardCallback != nullptr)
+				window->clipboardCallback(Utility::getClipboardText());
 			break;
 		}
 		default:
