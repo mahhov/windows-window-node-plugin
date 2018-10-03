@@ -8,7 +8,7 @@ keyCatcher.begin();
 
 keyCatcher.setCallback((down, code) => {
     console.log(down, code);
-    return code === 32;
+    return false;
 });
 
 new Repeater(() => {
@@ -18,11 +18,12 @@ new Repeater(() => {
 let window = new X.Window("elephant");
 
 window.makeWindow();
-window.setGeometry(100, 100, 250, 40);
-window.setLines(2, 20);
+window.setGeometry(100, 100, 250, 60);
+window.setLines(3, 20);
 window.show();
 window.setLine(0, "hi there !!");
 window.setLine(1, "this is line 2");
+window.setLine(2, "too many lines");
 
 window.setSystemTrayCallback(() => {
     console.log('whats up')
@@ -45,5 +46,5 @@ new Repeater(
     }, 5, true);
 
 new Repeater(() => {
-    console.log(X.Utility.mousePosition());
+    window.setLine(2, X.Utility.mousePosition());
 }, 100, true);
