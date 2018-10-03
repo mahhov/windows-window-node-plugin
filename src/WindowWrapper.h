@@ -16,10 +16,6 @@ class WindowWrapper : public Nan::ObjectWrap {
 
 	static NAN_METHOD(windowSetSystemTrayCallback);
 
-	static NAN_METHOD(windowBeginClipboardListener);
-
-	static NAN_METHOD(windowEndClipboardListener);
-
 	static NAN_METHOD(windowSetClipboardCallback);
 
 	static NAN_METHOD(windowUpdate);

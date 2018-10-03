@@ -16,10 +16,6 @@ class Window {
 
 	void setSystemTrayCallback(std::function<void()> callback);
 
-	void beginClipboardListener();
-
-	void endClipboardListener();
-
 	void setClipboardCallback(std::function<void(std::string)> callback);
 
 	void update();

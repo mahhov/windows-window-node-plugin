@@ -35,23 +35,19 @@ void Window::makeWindow() {
 
 	addSystemTrayIcon();
 
+	AddClipboardFormatListener(hwnd);
+
 	hasWindow = true;
 }
 
 void Window::destroyWindow() {
+	RemoveClipboardFormatListener(hwnd);
+
 	DestroyWindow(hwnd);
 }
 
 void Window::setSystemTrayCallback(std::function<void()> callback) {
 	systemTrayCallback = std::move(callback);
-}
-
-void Window::beginClipboardListener() {
-	AddClipboardFormatListener(hwnd);
-}
-
-void Window::endClipboardListener() {
-	RemoveClipboardFormatListener(hwnd);
 }
 
 void Window::setClipboardCallback(std::function<void(std::string)> callback) {
