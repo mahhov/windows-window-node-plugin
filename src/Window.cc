@@ -8,6 +8,8 @@ const char windowClassName[] = "myWindowClass";
 Window::Window(std::string name) : name(std::move(name)) {}
 
 void Window::makeWindow(bool focusable) {
+	this->focusable = focusable;
+
 	HINSTANCE hInstance = GetModuleHandle(0);
 	WNDCLASSEX windowClass;
 	windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -83,6 +85,10 @@ void Window::setLines(int lineCount, int lineHeight) {
 void Window::show() {
 	visible = true;
 	ShowWindow(hwnd, SW_SHOWNORMAL);
+	if (focusable) {
+		SetForegroundWindow(hwnd);
+		SetFocus(hwnd);
+	}
 	markDrawDirty();
 }
 

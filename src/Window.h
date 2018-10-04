@@ -48,6 +48,7 @@ class Window {
 
 	HWND hwnd;
 	std::string name;
+	bool focusable;
 	std::function<void()> systemTrayCallback;
 	std::function<void(std::string)> clipboardCallback;
 	std::function<void(bool)> focusCallback;
