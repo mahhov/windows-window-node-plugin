@@ -7,7 +7,7 @@
 int main() {
 	KeyCatcher keyCatcher;
 
-	std::function<bool(bool down, int code)> callback = [](bool down, int code) {
+	auto callback = [](bool down, int code) {
 		printf("%d %d\n", down, code);
 		return false;
 	};

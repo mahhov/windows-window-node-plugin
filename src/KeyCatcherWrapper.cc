@@ -42,7 +42,7 @@ NAN_METHOD(KeyCatcherWrapper::keyCatcherSetCallback) {
 	auto* keyCatcherWrapper = Nan::ObjectWrap::Unwrap<KeyCatcherWrapper>(info.This());
 	keyCatcherWrapper->callback.Reset(info[0].As<v8::Function>());
 
-	std::function<bool(bool down, int code, bool injected)> callback = [keyCatcherWrapper](bool down, int code, bool injected) {
+	auto callback = [keyCatcherWrapper](bool down, int code, bool injected) {
 		v8::Local<v8::Value> args[] {Nan::New(down), Nan::New(code), Nan::New(injected)};
 		return Nan::Call(keyCatcherWrapper->callback, 3, args).ToLocalChecked()->BooleanValue();
 	};

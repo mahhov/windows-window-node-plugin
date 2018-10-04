@@ -4,7 +4,7 @@
 int main() {
 	Window window("Test.cc");
 
-	std::function<void()> callback = []() {
+	auto callback = []() {
 		printf("CLICK ME\n");
 	};
 	window.setSystemTrayCallback(callback);

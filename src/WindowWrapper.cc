@@ -52,7 +52,7 @@ NAN_METHOD(WindowWrapper::windowSetSystemTrayCallback) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	windowWrapper->systemTrayCallback.Reset(info[0].As<v8::Function>());
 
-	std::function<void()> callback = [windowWrapper]() {
+	auto callback = [windowWrapper]() {
 		Nan::Call(windowWrapper->systemTrayCallback, 0, nullptr);
 	};
 
@@ -64,7 +64,7 @@ NAN_METHOD(WindowWrapper::windowSetClipboardCallback) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	windowWrapper->clipboardCallback.Reset(info[0].As<v8::Function>());
 
-	std::function<void(std::string text)> callback = [windowWrapper](std::string text) {
+	auto callback = [windowWrapper](std::string text) {
 		v8::Local<v8::Value> args[] {Nan::New(text).ToLocalChecked()};
 		Nan::Call(windowWrapper->clipboardCallback, 1, args);
 	};
@@ -77,7 +77,7 @@ NAN_METHOD(WindowWrapper::windowSetFocusCallback) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	windowWrapper->focusCallback.Reset(info[0].As<v8::Function>());
 
-	auto callback = [windowWrapper](bool focus) { // todo declare all callbacks auto
+	auto callback = [windowWrapper](bool focus) {
 		v8::Local<v8::Value> args[] {Nan::New(focus)};
 		Nan::Call(windowWrapper->focusCallback, 1, args);
 	};
@@ -90,7 +90,7 @@ NAN_METHOD(WindowWrapper::windowSetKeyCallback) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	windowWrapper->keyCallback.Reset(info[0].As<v8::Function>());
 
-	auto callback = [windowWrapper](int key) { // todo declare all callbacks auto
+	auto callback = [windowWrapper](int key) {
 		v8::Local<v8::Value> args[] {Nan::New(key)};
 		Nan::Call(windowWrapper->keyCallback, 1, args);
 	};
