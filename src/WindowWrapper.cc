@@ -12,6 +12,8 @@ NAN_MODULE_INIT(WindowWrapper::Init) {
 	Nan::SetPrototypeMethod(ctor, "destroyWindow", windowDestroyWindow);
 	Nan::SetPrototypeMethod(ctor, "setSystemTrayCallback", windowSetSystemTrayCallback);
 	Nan::SetPrototypeMethod(ctor, "setClipboardCallback", windowSetClipboardCallback);
+	Nan::SetPrototypeMethod(ctor, "setFocusCallback", windowSetFocusCallback);
+	Nan::SetPrototypeMethod(ctor, "setKeyCallback", windowSetKeyCallback);
 	Nan::SetPrototypeMethod(ctor, "update", windowUpdate);
 	Nan::SetPrototypeMethod(ctor, "setGeometry", windowSetGeometry);
 	Nan::SetPrototypeMethod(ctor, "setLines", windowSetLines);
@@ -37,7 +39,7 @@ NAN_METHOD(WindowWrapper::windowNew) {
 NAN_METHOD(WindowWrapper::windowMakeWindow) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	Window* window = windowWrapper->window;
-	window->makeWindow();
+	window->makeWindow(info[0]->BooleanValue());
 }
 
 NAN_METHOD(WindowWrapper::windowDestroyWindow) {
@@ -69,6 +71,32 @@ NAN_METHOD(WindowWrapper::windowSetClipboardCallback) {
 
 	Window* window = windowWrapper->window;
 	window->setClipboardCallback(callback);
+}
+
+NAN_METHOD(WindowWrapper::windowSetFocusCallback) {
+	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
+	windowWrapper->focusCallback.Reset(info[0].As<v8::Function>());
+
+	auto callback = [windowWrapper](bool focus) { // todo declare all callbacks auto
+		v8::Local<v8::Value> args[] {Nan::New(focus)};
+		Nan::Call(windowWrapper->focusCallback, 1, args);
+	};
+
+	Window* window = windowWrapper->window;
+	window->setFocusCallback(callback);
+}
+
+NAN_METHOD(WindowWrapper::windowSetKeyCallback) {
+	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
+	windowWrapper->keyCallback.Reset(info[0].As<v8::Function>());
+
+	auto callback = [windowWrapper](int key) { // todo declare all callbacks auto
+		v8::Local<v8::Value> args[] {Nan::New(key)};
+		Nan::Call(windowWrapper->keyCallback, 1, args);
+	};
+
+	Window* window = windowWrapper->window;
+	window->setKeyCallback(callback);
 }
 
 NAN_METHOD(WindowWrapper::windowUpdate) {

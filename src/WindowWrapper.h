@@ -18,6 +18,10 @@ class WindowWrapper : public Nan::ObjectWrap {
 
 	static NAN_METHOD(windowSetClipboardCallback);
 
+	static NAN_METHOD(windowSetFocusCallback);
+
+	static NAN_METHOD(windowSetKeyCallback);
+
 	static NAN_METHOD(windowUpdate);
 
 	static NAN_METHOD(windowSetGeometry);
@@ -38,6 +42,8 @@ class WindowWrapper : public Nan::ObjectWrap {
 	Window* window;
 	Nan::Callback systemTrayCallback;
 	Nan::Callback clipboardCallback;
+	Nan::Callback focusCallback;
+	Nan::Callback keyCallback;
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
 };
 

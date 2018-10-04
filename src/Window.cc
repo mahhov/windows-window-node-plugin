@@ -7,7 +7,7 @@ const char windowClassName[] = "myWindowClass";
 
 Window::Window(std::string name) : name(std::move(name)) {}
 
-void Window::makeWindow() {
+void Window::makeWindow(bool focusable) {
 	HINSTANCE hInstance = GetModuleHandle(0);
 	WNDCLASSEX windowClass;
 	windowClass.cbSize = sizeof(WNDCLASSEX);
@@ -18,7 +18,7 @@ void Window::makeWindow() {
 	windowClass.hInstance = hInstance;
 	windowClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 	windowClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	windowClass.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
+	windowClass.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1); // todo proper casting
 	windowClass.lpszMenuName = NULL;
 	windowClass.lpszClassName = windowClassName;
 	windowClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
@@ -26,7 +26,7 @@ void Window::makeWindow() {
 	RegisterClassEx(&windowClass);
 
 	hwnd = CreateWindowEx(
-		WS_EX_NOACTIVATE | WS_EX_TOPMOST,
+		(!focusable ? WS_EX_NOACTIVATE : 0) | WS_EX_TOPMOST,
 		windowClassName,
 		NULL,
 		WS_POPUP | WS_BORDER,
@@ -52,6 +52,14 @@ void Window::setSystemTrayCallback(std::function<void()> callback) {
 
 void Window::setClipboardCallback(std::function<void(std::string)> callback) {
 	clipboardCallback = std::move(callback);
+}
+
+void Window::setFocusCallback(std::function<void(bool focus)> callback) {
+	focusCallback = std::move(callback);
+}
+
+void Window::setKeyCallback(std::function<void(int key)> callback) {
+	keyCallback = std::move(callback);
 }
 
 void Window::update() {
@@ -148,6 +156,19 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			if (window->clipboardCallback != nullptr)
 				window->clipboardCallback(Utility::getClipboardText());
+			break;
+		}
+		case WM_NCACTIVATE: {
+			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			if (window->focusCallback != nullptr) {
+				window->focusCallback(wParam);
+			}
+			break;
+		}
+		case WM_KEYDOWN: {
+			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			if (window->keyCallback != nullptr)
+				window->keyCallback(wParam);
 			break;
 		}
 		default:
