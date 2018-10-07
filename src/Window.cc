@@ -166,9 +166,20 @@ LRESULT CALLBACK Window::process(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPar
 		}
 		case WM_NCACTIVATE: {
 			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
-			if (window->focusCallback != nullptr) {
+			if (window->focusCallback != nullptr)
 				window->focusCallback(wParam);
-			}
+			break;
+		}
+		case WM_SETFOCUS: {
+			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			if (window->focusCallback != nullptr)
+				window->focusCallback(true);
+			break;
+		}
+		case WM_KILLFOCUS: {
+			Window* window = (Window*) GetWindowLongPtr(hwnd, GWLP_USERDATA);
+			if (window->focusCallback != nullptr)
+				window->focusCallback(false);
 			break;
 		}
 		case WM_KEYDOWN: {
