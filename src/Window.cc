@@ -78,7 +78,7 @@ void Window::setGeometry(int x, int y, int width, int height) {
 }
 
 void Window::setLines(int lineCount, int lineHeight) {
-	lines.assign(lineCount, "");
+	lines.assign(lineCount, {"", RGB(0, 0, 0)});
 	this->lineHeight = lineHeight;
 }
 
@@ -97,8 +97,8 @@ void Window::hide() {
 	ShowWindow(hwnd, SW_HIDE);
 }
 
-void Window::setLine(int index, std::string line) {
-	lines[index] = line;
+void Window::setLine(int index, std::string text, COLORREF color) {
+	lines[index] = {std::move(text), color};
 	markDrawDirty();
 }
 
@@ -123,9 +123,10 @@ void Window::draw() {
 	HDC hdc = BeginPaint(hwnd, &ps);
 
 	for (int i = 0; i != lines.size(); i++) {
+		SetTextColor(hdc, lines[i].color);
 		RECT myRect {0, i * lineHeight, width, (i + 1) * lineHeight};
-		LPCSTR text = lines[i].c_str();
-		DrawText(hdc, text, -1, &myRect, 0);
+		LPCSTR text = lines[i].text.c_str();
+		DrawText(hdc, text, -1, &myRect, DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX);
 	}
 
 	EndPaint(hwnd, &ps);

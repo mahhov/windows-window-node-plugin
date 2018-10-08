@@ -21,24 +21,18 @@ window.makeWindow(true);
 window.setGeometry(100, 100, 250, 80);
 window.setLines(4, 20);
 window.show();
-window.setLine(0, "hi there !!");
-window.setLine(1, "this is line 2");
-window.setLine(2, "too many lines");
+window.setLine(0, "hi there !!", [255, 0, 0]);
+window.setLine(1, "clipboard contents");
+window.setLine(2, "mouse cords");
+window.setLine(3, "global key press");
 
-window.setClipboardCallback(a => console.log('cliboard', a));
+window.setClipboardCallback(a => window.setLine(1, a));
 
 window.setSystemTrayCallback(() => console.log('sys tray'));
 
 window.setKeyCallback(key => console.log('key', key));
 
 window.setFocusCallback(focus => console.log('focus', focus));
-
-let increment = new Repeater(
-    (_, i) => {
-        // window.setLine(0, i);
-        window.setLine(1, X.Utility.getClipboardText());
-    },
-    1000, true);
 
 new Repeater(
     update => {

@@ -32,12 +32,17 @@ class Window {
 
 	void hide();
 
-	void setLine(int index, std::string line);
+	void setLine(int index, std::string text, COLORREF color = RGB(0, 0, 0));
 
 	bool visible {};
 	bool hasWindow {};
 
   private:
+	struct Line {
+		std::string text;
+		COLORREF color;
+	};
+
 	void addSystemTrayIcon();
 
 	void markDrawDirty();
@@ -54,7 +59,7 @@ class Window {
 	std::function<void(bool)> focusCallback;
 	std::function<void(int)> keyCallback;
 	int width, lineHeight;
-	std::vector<std::string> lines;
+	std::vector<Line> lines;
 };
 
 #endif

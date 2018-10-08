@@ -132,7 +132,15 @@ NAN_METHOD(WindowWrapper::windowHide) {
 NAN_METHOD(WindowWrapper::windowSetLine) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	Window* window = windowWrapper->window;
-	window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]));
+	if (info.Length() == 2)
+		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]));
+	else {
+		v8::Local<v8::Array> colorArray = info[2].As<v8::Array>();
+		int r = colorArray->Get(0)->Int32Value();
+		int g = colorArray->Get(1)->Int32Value();
+		int b = colorArray->Get(2)->Int32Value();
+		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]), RGB(r, g, b));
+	}
 }
 
 NAN_GETTER(WindowWrapper::windowVisible) {
