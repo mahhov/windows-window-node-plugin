@@ -32,7 +32,7 @@ class Window {
 
 	void hide();
 
-	void setLine(int index, std::string text, COLORREF color = RGB(0, 0, 0));
+	void setLine(int index, std::string text, COLORREF textColor = RGB(0, 0, 0), COLORREF bgColor = RGB(255, 255, 255));
 
 	bool visible {};
 	bool hasWindow {};
@@ -40,7 +40,8 @@ class Window {
   private:
 	struct Line {
 		std::string text;
-		COLORREF color;
+		COLORREF textColor;
+		COLORREF bgColor;
 	};
 
 	void addSystemTrayIcon();

@@ -45,6 +45,8 @@ class WindowWrapper : public Nan::ObjectWrap {
 	Nan::Callback focusCallback;
 	Nan::Callback keyCallback;
 	static Nan::Persistent<v8::FunctionTemplate> constructor;
+
+	static COLORREF rgbArrayToColorref(v8::Local<v8::Array> rgbArray);
 };
 
 #endif

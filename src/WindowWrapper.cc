@@ -132,15 +132,15 @@ NAN_METHOD(WindowWrapper::windowHide) {
 NAN_METHOD(WindowWrapper::windowSetLine) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	Window* window = windowWrapper->window;
-	if (info.Length() == 2)
+	if (info.Length() >= 4)
+		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]),
+		                rgbArrayToColorref(info[2].As<v8::Array>()),
+		                rgbArrayToColorref(info[3].As<v8::Array>()));
+	else if (info.Length() == 3)
+		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]),
+		                rgbArrayToColorref(info[2].As<v8::Array>()));
+	else
 		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]));
-	else {
-		v8::Local<v8::Array> colorArray = info[2].As<v8::Array>();
-		int r = colorArray->Get(0)->Int32Value();
-		int g = colorArray->Get(1)->Int32Value();
-		int b = colorArray->Get(2)->Int32Value();
-		window->setLine(info[0]->Int32Value(), *Nan::Utf8String(info[1]), RGB(r, g, b));
-	}
 }
 
 NAN_GETTER(WindowWrapper::windowVisible) {
@@ -153,4 +153,11 @@ NAN_GETTER(WindowWrapper::windowHasWindow) {
 	auto* windowWrapper = Nan::ObjectWrap::Unwrap<WindowWrapper>(info.This());
 	Window* window = windowWrapper->window;
 	info.GetReturnValue().Set(window->hasWindow);
+}
+
+COLORREF WindowWrapper::rgbArrayToColorref(v8::Local<v8::Array> rgbArray) {
+	int r = rgbArray->Get(0)->Int32Value();
+	int g = rgbArray->Get(1)->Int32Value();
+	int b = rgbArray->Get(2)->Int32Value();
+	return RGB(r, g, b);
 }

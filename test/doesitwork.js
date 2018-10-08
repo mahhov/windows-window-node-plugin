@@ -26,7 +26,7 @@ window.setLine(1, "clipboard contents");
 window.setLine(2, "mouse cords");
 window.setLine(3, "global key press");
 
-window.setClipboardCallback(a => window.setLine(1, a));
+window.setClipboardCallback(a => window.setLine(1, a, [0, 255, 0], [0, 0, 0]));
 
 window.setSystemTrayCallback(() => console.log('sys tray'));
 

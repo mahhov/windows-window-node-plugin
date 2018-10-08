@@ -97,8 +97,8 @@ void Window::hide() {
 	ShowWindow(hwnd, SW_HIDE);
 }
 
-void Window::setLine(int index, std::string text, COLORREF color) {
-	lines[index] = {std::move(text), color};
+void Window::setLine(int index, std::string text, COLORREF textColor, COLORREF bgColor) {
+	lines[index] = {std::move(text), textColor, bgColor};
 	markDrawDirty();
 }
 
@@ -123,10 +123,12 @@ void Window::draw() {
 	HDC hdc = BeginPaint(hwnd, &ps);
 
 	for (int i = 0; i != lines.size(); i++) {
-		SetTextColor(hdc, lines[i].color);
-		RECT myRect {0, i * lineHeight, width, (i + 1) * lineHeight};
+		SetBkMode(hdc, TRANSPARENT);
+		SetTextColor(hdc, lines[i].textColor);
+		RECT rect {0, i * lineHeight, width, (i + 1) * lineHeight};
+		FillRect(hdc, &rect, CreateSolidBrush(lines[i].bgColor));
 		LPCSTR text = lines[i].text.c_str();
-		DrawText(hdc, text, -1, &myRect, DT_SINGLELINE | DT_END_ELLIPSIS | DT_NOPREFIX);
+		DrawText(hdc, text, -1, &rect, DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER | DT_END_ELLIPSIS);
 	}
 
 	EndPaint(hwnd, &ps);
