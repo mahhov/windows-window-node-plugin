@@ -99,7 +99,6 @@ void Window::hide() {
 
 void Window::setLine(int index, std::string text, COLORREF textColor, COLORREF bgColor) {
 	lines[index] = {std::move(text), textColor, bgColor};
-	markDrawDirty();
 }
 
 void Window::addSystemTrayIcon() {
